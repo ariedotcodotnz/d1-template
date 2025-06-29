@@ -1,16 +1,60 @@
 {
-  "compatibility_date": "2025-04-01",
+  "name": "cloudcomments",
   "main": "src/index.ts",
-  "name": "d1-template",
-  "upload_source_maps": true,
+  "compatibility_date": "2025-03-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
   "d1_databases": [
     {
-      "binding": "DB",
-      "database_id": "dac4ae3b-2223-4c7e-957b-8b7c5222465d",
-      "database_name": "d1-template"
+      "binding": "COMMENTS_DB",
+      "database_name": "cloudcomments",
+      "database_id": "YOUR_DATABASE_ID"
     }
   ],
-  "observability": {
-    "enabled": true
+  "kv_namespaces": [
+    {
+      "binding": "SESSIONS",
+      "id": "YOUR_KV_NAMESPACE_ID"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "class_name": "RateLimiter"
+      }
+    ]
+  },
+  "queues": {
+    "producers": [
+      {
+        "queue": "email-queue",
+        "binding": "EMAIL_QUEUE"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "email-queue",
+        "max_batch_size": 10,
+        "max_batch_timeout": 30
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["RateLimiter"]
+    }
+  ],
+  "vars": {
+    "JWT_SECRET": "YOUR_SECURE_JWT_SECRET_KEY_HERE",
+    "ADMIN_EMAIL": "admin@example.com",
+    "ADMIN_PASSWORD_HASH": "$2a$10$XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "RESEND_API_KEY": "re_XXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "TURNSTILE_SECRET_KEY": "0x4XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "WEBHOOK_SECRET": "whsec_XXXXXXXXXXXXXXXXXXXXXXXXXX"
   }
 }
