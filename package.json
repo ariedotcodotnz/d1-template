@@ -1,33 +1,48 @@
 {
   "name": "d1-template",
-  "description": "Cloudflare's native serverless SQL database.",
-  "cloudflare": {
-    "label": "Worker + D1 Database",
-    "products": [
-      "Workers",
-      "D1"
-    ],
-    "categories": [
-      "storage"
-    ],
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c6fc5da3-1e0a-4608-b2f1-9628577ec800/public",
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ],
-    "docs_url": "https://developers.cloudflare.com/d1/",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public",
-    "publish": true
+  "version": "2.0.0",
+  "description": "Privacy-focused comment system built on Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev --local --persist",
+    "deploy": "wrangler deploy",
+    "test": "vitest",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src/**/*.ts",
+    "migrate:local": "wrangler d1 migrations apply cloudcomments --local",
+    "migrate:prod": "wrangler d1 migrations apply cloudcomments",
+    "setup": "bash setup.sh",
+    "generate-hash": "node scripts/generate-password-hash.js"
+  },
+  "keywords": [
+    "comments",
+    "cloudflare",
+    "workers",
+    "disqus-alternative",
+    "privacy"
+  ],
+  "author": "CloudComments",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/jwt": "^1.0.0",
+    "bcryptjs": "^2.4.3",
+    "marked": "^12.0.0"
   },
   "devDependencies": {
-    "typescript": "5.8.3",
-    "wrangler": "4.16.1"
+    "@cloudflare/workers-types": "^4.20240314.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.11.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.3.0",
+    "wrangler": "^3.0.0"
   },
-  "scripts": {
-    "cf-typegen": "wrangler types",
-    "check": "tsc && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "predeploy": "wrangler d1 migrations apply DB --remote",
-    "seedLocalD1": "wrangler d1 migrations apply DB --local"
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
